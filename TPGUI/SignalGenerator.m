@@ -29,5 +29,15 @@ classdef SignalGenerator %% acá se generan las señales
             signal_t = a*square(2*pi*self.t*freq ,dc );
             signal_f = abs(fftshift(fft(signal_t)));
         end
+         function [signal_t, signal_f] = generateUniformNoise(self , a )
+           %ruido uniforme
+            signal_t = rand(1, length(self.t)) * a * 2 - a;
+            signal_f = abs(fftshift(fft(signal_t)));
+         end
+         function [signal_t, signal_f] = generatePoissonNoise(self, media ,desvio)
+            %ruido gaussiano
+            signal_t = media.*randn(1, length(self.t)) + desvio;
+            signal_f = abs(fftshift(fft(signal_t)));
+        end
     end
 end 
