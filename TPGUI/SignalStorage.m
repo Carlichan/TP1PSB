@@ -4,9 +4,32 @@ classdef SignalStorage % contiene una lista de signalControllers, cada signal co
     end
     
     methods
-        function saveSignal(signal)
-        % hacer la funcion de guardado trate de copiarla de mi gui pero no
-        % sale
+
+        function signal = getSignal(position)
+           signal = obj.signalList(position); 
+        end
+        
+        function saveSignal(obj, signal, tmin, tmax, fs)
+            [file, path]=uiputfile('*.mat','Guardar señal como' );
+            if file ~=0
+                newFile = fullfile(path, file);
+            end
+%             tcounter = 0;
+%             i = 1;
+%             paso = 1/1e6;
+%             while tcounter<tmin 
+%                 signal.signal_t(i) = 0;
+% %                 i = i+1/(fs*paso);
+%                   i=i+1;
+%                 tcounter = tcounter+ 1/fs;
+%             end
+%             while tcounter>tmax && tcounter< length(signal.signal_t)
+%                 signal.signal_t(i) = 0;
+% %                 i = i+1/(fs*paso);
+%                 i = i+1;
+%                 tcounter = tcounter+1/fs;
+%             end
+            save(newFile,'signal');
         end
         
         function addSignal(obj, signal_)
@@ -17,16 +40,13 @@ classdef SignalStorage % contiene una lista de signalControllers, cada signal co
             obj.signalList(index_) = [];
         end
         
-        function signal = loadSignal()
+        function signal = loadSignal(obj)
             file = uigetfile('*.mat','elegir archivo','Multiselect','off');
             if(file ~=0)
-                x = [];
-                load(file);
-                if ~isempty(x)
-                    signal = x;                    
-                end
+                  signal = load(file);
+                  signal = signal.signal;
             end
-            file = file(1:end-4);
+            obj.signalList = [obj.signalList signal];
         end
         
     end

@@ -4,7 +4,10 @@ classdef FileHandler
     end
     
     methods
-
+        function save
+            
+            
+        end
     end
     
 end 

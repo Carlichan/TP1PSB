@@ -20,8 +20,10 @@ signalStorage = SignalStorage();
 % xlim([-10 10])
 % signalStorage.saveSignal(signal1, 0, 2, 1e6);
 % signal1 = signalStorage.loadSignal();
-%signal1 = digitalOperator.idealSample(signal1, 5);
+signal1 = digitalOperator.idealSample(signal1, 1e6);
 % signal1 = digitalOperator.naturalSample(signal1, 0.5, 50);
- signal1 = digitalOperator.instantSample(signal1, 50, 50);
- plot(signal1.t,signal1.signal_t)
+% signal1 = digitalOperator.instantSample(signal1, 0.5, 50);
+dc = 50;
+square = rectangularPulse(0,dc/100,signal1.t);
+  plot(signal1.t,signal1.signal_t)
 % %plot(s);

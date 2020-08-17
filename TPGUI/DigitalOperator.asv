@@ -42,8 +42,8 @@ classdef DigitalOperator
                 square(i) = 1;
                 i = i + 1;
             end
-             signal = obj.idealSample(signal, fs);
-             signal.signal_t = conv(signal.signal_t, square);
+             signal.signal_t = obj.idealSample(signal, fs);
+             signal.signal_t = conv(signal.signal_t.signal_t, square);
         end
     end
 end
