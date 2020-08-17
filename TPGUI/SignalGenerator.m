@@ -1,4 +1,4 @@
-classdef SignalGenerator %% acá se generan las señales
+classdef SignalGenerator %% acÃ¡ se generan las seÃ±ales
     properties
         fs
         t        
@@ -20,12 +20,23 @@ classdef SignalGenerator %% acá se generan las señales
         end
         function [signal_t, signal_f] = generateTriangular(self, freq , a , dc)
             %unitTriangle = a*tripuls(self.t/f,dc/f,0);
-            tri = @(t) sawtooth(2*pi*freq*self.t) , (dc/100)/2 + 0.5;
-            signal_t = a*tri(self.t);
+            d = tlow_:1/freq:thigh_-(1/fs_);
+            x = a *tripuls(self.t,(1/freq)*dc/100);
+            signal_t = pulstran(self.t,d,x,fs_)+pulstran(-self.t-1/freq,d,x,fs_);
             signal_f = abs(fftshift(fft(signal_t)));
         end
         function [signal_t, signal_f] = generateSquare(self, freq , a , dc)
             signal_t = a*square(2*pi*self.t*freq ,dc );
+            signal_f = abs(fftshift(fft(signal_t)));
+        end
+         function [signal_t, signal_f] = generateUniformNoise(self , a )
+           %ruido uniforme
+            signal_t = rand(1, length(self.t)) * a * 2 - a;
+            signal_f = abs(fftshift(fft(signal_t)));
+         end
+         function [signal_t, signal_f] = generatePoissonNoise(self, media ,desvio)
+            %ruido gaussiano
+            signal_t = media.*randn(1, length(self.t)) + desvio;
             signal_f = abs(fftshift(fft(signal_t)));
         end
     end
