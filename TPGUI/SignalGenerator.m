@@ -7,7 +7,7 @@ classdef SignalGenerator %% acá se generan las señales
     end
         
     methods
-        function obj = SignalGenerator(fs_, tlow_, thigh_)
+        function obj = SignalGenerator( fs_, tlow_, thigh_)
             obj.fs = fs_;
             obj.t = tlow_:1/fs_:thigh_-(1/fs_);
             obj.n = length(obj.t);

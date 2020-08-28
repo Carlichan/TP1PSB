@@ -22,7 +22,7 @@ function varargout = TP1GUI(varargin)
 
 % Edit the above text to modify the response to help TP1GUI
 
-% Last Modified by GUIDE v2.5 09-Aug-2020 17:12:19
+% Last Modified by GUIDE v2.5 20-Aug-2020 15:10:07
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -46,51 +46,20 @@ end
 
 % --- Executes just before TP1GUI is made visible.
 function TP1GUI_OpeningFcn(hObject, eventdata, handles, varargin)
-% This function has no output args, see OutputFcn.
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to TP1GUI (see VARARGIN)
 
-% Choose default command line output for TP1GUI
 handles.output = hObject;
-
-% Update handles structure
 guidata(hObject, handles);
-
-% UIWAIT makes TP1GUI wait for user response (see UIRESUME)
-% uiwait(handles.figure1);
-
 
 % --- Outputs from this function are returned to the command line.
 function varargout = TP1GUI_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
 varargout{1} = handles.output;
 
 
 % --- Executes on selection change in popupmenu2.
 function popupmenu2_Callback(hObject, eventdata, handles)
-% hObject    handle to popupmenu2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns popupmenu2 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from popupmenu2
-
 
 % --- Executes during object creation, after setting all properties.
 function popupmenu2_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to popupmenu2 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
@@ -98,21 +67,163 @@ end
 
 % --- Executes on selection change in listbox1.
 function listbox1_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox1
 
 
 % --- Executes during object creation, after setting all properties.
 function listbox1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- If Enable == 'on', executes on mouse press in 5 pixel border.
+% --- Otherwise, executes on mouse press in 5 pixel border or over idealrb.
+function idealrb_ButtonDownFcn(hObject, eventdata, handles)
+
+
+
+function samplefs_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function samplefs_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in sampleButton.
+function sampleButton_Callback(hObject, eventdata, handles)
+digitalOperator = DigitalOperator();
+ideal = get(handles.idealrb,'Value');
+natural = get(handles.naturalrb,'Value');
+instant = get(handles.instantrb,'Value');
+fs = str2double(get(handles.samplefs, 'String'));
+dc = str2double(get(handles.sampledc, 'String'));
+if ideal == 1
+    digitalOperator.idealSample(signal);
+elseif natural == 1
+    digitalOperator.naturalSample(signal,fs,dc);
+elseif instant == 1
+    digitalOperator.instantSample(signal,fs,dc);
+end
+
+
+
+function sampledc_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function sampledc_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function frec_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function frec_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in create.
+function create_Callback(hObject, eventdata, handles)
+sin = get(handles.sin,'Value');
+square = get(handles.square,'Value');
+triangle = get(handles.triangle,'Value');
+dc = str2double(get(handles.dc, 'String'));
+frequency = str2double(get(handles.frec, 'String'));
+phase = str2double(get(handles.phase, 'String'));
+amplitude = str2double(get(handles.amplitude, 'String'));
+tmin =  str2double(get(handles.tmin, 'String'));
+tmax =  str2double(get(handles.tmax, 'String'));
+signalGenerator = SignalGenerator(1e5, tmin, tmax);
+
+if sin == 1
+[signal_t, signal_f] = signalGenerator.generateSinusoidal(frecuency,amplitude,phase);
+elseif square == 1
+[signal_t, signal_f] = signalGenerator.generateSquare(frecuency,amplitude,dc);
+elseif triangle == 1
+[signal_t, signal_f] = signalGenerator.generateTriangular(amplitude,frecuency,dc);
+end
+
+function dc_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function dc_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function tmin_Callback(hObject, eventdata, handles)
+
+% --- Executes during object creation, after setting all properties.
+function tmin_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function tmax_Callback(hObject, eventdata, handles)
+
+
+% --- Executes during object creation, after setting all properties.
+function tmax_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function amplitude_Callback(hObject, eventdata, handles)
+% hObject    handle to amplitude (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of amplitude as text
+%        str2double(get(hObject,'String')) returns contents of amplitude as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function amplitude_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to amplitude (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
-% Hint: listbox controls usually have a white background on Windows.
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function phase_Callback(hObject, eventdata, handles)
+% hObject    handle to phase (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of phase as text
+%        str2double(get(hObject,'String')) returns contents of phase as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function phase_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to phase (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');

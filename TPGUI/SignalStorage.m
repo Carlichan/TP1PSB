@@ -8,8 +8,9 @@ classdef SignalStorage % contiene una lista de signalControllers, cada signal co
         function signal = getSignal(position)
            signal = obj.signalList(position); 
         end
-        
-        function saveSignal(obj, signal, tmin, tmax, fs)
+%          USAR LA FUNCION RESAMPLE PARA ESTABLECER LA FS DE LA CARGADA EN
+%          100 000 
+        function saveSignal(obj, signal)
             [file, path]=uiputfile('*.mat','Guardar señal como' );
             if file ~=0
                 newFile = fullfile(path, file);
@@ -43,10 +44,21 @@ classdef SignalStorage % contiene una lista de signalControllers, cada signal co
         function signal = loadSignal(obj)
             file = uigetfile('*.mat','elegir archivo','Multiselect','off');
             if(file ~=0)
-                  signal = load(file);
-                  signal = signal.signal;
+                  load(file);
+                  t1 = signal.t;
+                  deltat = t1(2)-t1(1);
+%                   signalsfs = 1/deltat;
+                  fs = 1e5;
+                  tmin = signal.t(1);
+                  tmax = (length(signal.t)*deltat)+tmin;
+                  signal.t = tmin:1/fs:tmax-1/fs;
+                  signal.signal_t = interp1(t1, signal.signal_t, signal.t);
+                  obj.signalList = [obj.signalList signal];
+            else
+                msgbox('No se ha seleccionado nada');
+                signal = [];
             end
-            obj.signalList = [obj.signalList signal];
+            
         end
         
     end
